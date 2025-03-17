@@ -64,7 +64,7 @@ userSchema.loadClass(UserClass);
 userSchema.virtual('id').get(function() {
   return this._id;
 });
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function(next, doc) {
 	doc.date = new Date();
 	next();
 });
