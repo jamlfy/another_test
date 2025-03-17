@@ -50,3 +50,7 @@ export const info = (req, res ) => {
 		}))
 
 };
+
+export const trade = (req, res) => {
+	res.json({ message: "in a next"});
+}

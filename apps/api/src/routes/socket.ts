@@ -1,4 +1,5 @@
 import socketio from "socket.io";
+import stock from '@another/stock';
 import passport from "./jwt";
 
 const wrapMidSocketIo = middleware => (socket, next) => middleware(socket.request, {}, next);
@@ -8,8 +9,8 @@ io.use(wrapMidSocketIo(passport.initialize()));
 io.use(wrapMidSocketIo(passport.authenticate(['jwt'])));
 
 io.on("connection", (socket) => {
-	socket.on('sell', operation.sell);
-	socket.on('bay', operation.bay);
+	socket.on('sell', stock.sell);
+	socket.on('buy', stock.buy);
 });
 
 export default io;
