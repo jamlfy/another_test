@@ -9,8 +9,9 @@ io.use(wrapMidSocketIo(passport.initialize()));
 io.use(wrapMidSocketIo(passport.authenticate(['jwt'])));
 
 io.on("connection", (socket) => {
-	socket.on('sell', stock.sell);
-	socket.on('buy', stock.buy);
+	stock.watch(socket);
+	socket.on('sell', stock.sell(socket));
+	socket.on('buy', stock.buy(socket));
 });
 
 export default io;

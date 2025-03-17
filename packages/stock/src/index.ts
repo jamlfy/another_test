@@ -54,3 +54,31 @@ export const info = (req, res ) => {
 export const trade = (req, res) => {
 	res.json({ message: "in a next"});
 }
+
+export const buy =  (socket) => (idPropose) => {
+	const contr = await History.findById(idPropose);
+	contr.buyer = socket.user._id;
+	contr.save()
+		.then((e) => socket.emit('buy', { id: e._id }))
+		.catch((error) => socket.emit("error", {
+			error,
+			message: "Cannot creacte the sell"
+		}));
+};
+
+export const sell = (socket) => async ({ price, amount, stock }) => {
+	const sell = new History({ price, amount, stock, seller: socket.user._id, where: "trans" });
+	sell.save()
+		.then((e) => socket.emit('sell', { id: e._id }))
+		.catch((error) => socket.emit("error", {
+			error,
+			message: "Cannot creacte the sell"
+		}))
+};
+
+export const watch = (socket) => {
+	History.watch()
+		.on('changes', (e) => {
+			socket.emit('watch', e.toObject());
+		});
+};
