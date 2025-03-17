@@ -4,18 +4,22 @@
  */
 
 import express from 'express';
-import * as path from 'path';
+import { createServer } from "node:http";
+import API from "./routes/API";
+import Auth from "./routes/auth";
+import Socket from "./routes/socket";
+
 
 const app = express();
+const server = createServer(app);
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+Socket.attach(server);
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to api!' });
-});
+app.use('/', API);
+app.use('/', Auth);
 
 const port = process.env.PORT || 3333;
-const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
+
+httpServer.listen(port, () => {
+  console.log(`Listening on http://localhost:${port}`);
 });
-server.on('error', console.error);
