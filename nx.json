@@ -69,7 +69,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["api-e2e/**/*"]
+      "exclude": []
     }
   ],
   "targetDefaults": {

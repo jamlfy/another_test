@@ -59,7 +59,6 @@
   },
   "workspaces": [
     "apps/*",
-    "api",
-    "api-e2e"
+    "pacakges/*"
   ]
 }
