@@ -18,7 +18,7 @@ auth.post('/login', passport.authenticate('local', {
     .status(200)
     .json({ 
       message: "user logged in",
-      token: jwt.sing(req.user, "secret")
+      accessToken: jwt.sing(req.user, "secret")
     });
 });
 
@@ -42,7 +42,7 @@ auth.post('/signup', (req, res, next) => {
         .status(200)
         .json({ 
           message: "user logged in",
-          token: jwt.sing(e, "secret")
+          accessToken: jwt.sing(e, "secret")
         });
     })
     .catch((err) => {
