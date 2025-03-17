@@ -1,4 +1,5 @@
 import { Route } from "express";
+import jwt from "jsonwebtoken";
 import passport from "./jwt";
 
 const auth = Route();
@@ -8,13 +9,16 @@ auth.get('/profile', passport.authenticate('jwt', {
   successReturnToOrRedirect: '/',
   failureMessage: true
 }), function(req, res, next) {
-
+  res.json(req.user);
 });
 
 auth.post('/login/password', passport.authenticate('local', {
-  failureRedirect: '/profile',
   failureMessage: true
-}));
+}), function(req, res, next) {
+  res.json({
+    token: jwt.sing(req.user, "secret")
+  })
+});
 
 
 router.post('/logout', function(req, res, next) {

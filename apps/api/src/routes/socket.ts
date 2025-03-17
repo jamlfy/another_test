@@ -8,7 +8,8 @@ io.use(wrapMidSocketIo(passport.initialize()));
 io.use(wrapMidSocketIo(passport.authenticate(['jwt'])));
 
 io.on("connection", (socket) => {
-	
+	socket.on('sell', operation.sell);
+	socket.on('bay', operation.bay);
 });
 
 export default io;
