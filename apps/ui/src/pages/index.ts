@@ -1,7 +1,7 @@
-import { createMemoryHistory, createRouter } from 'vue-router'
+import { createMemoryHistory, createRouter } from 'vue-router';
 
-import Login from './login.vue'
-import Stock from './Stock.vue'
+import Login from './login.vue';
+import Stock from './Stock.vue';
 
 const routes = [
   { path: '/', component: HomeView },

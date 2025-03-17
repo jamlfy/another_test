@@ -4,11 +4,10 @@
  */
 
 import express from 'express';
-import { createServer } from "node:http";
-import API from "./routes/API";
-import Auth from "./routes/auth";
-import Socket from "./routes/socket";
-
+import { createServer } from 'node:http';
+import API from './routes/API';
+import Auth from './routes/auth';
+import Socket from './routes/socket';
 
 const app = express();
 const server = createServer(app);

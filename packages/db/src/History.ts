@@ -6,13 +6,13 @@ const HistoryStockSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'users',
   },
-  buyer: { 
-    type: Schema.Types.ObjectId, 
+  buyer: {
+    type: Schema.Types.ObjectId,
     ref: 'users',
   },
   where: {
     type: String,
-    enum: ["trans", "init"],
+    enum: ['trans', 'init'],
     required: true,
   },
   stock: {
@@ -24,7 +24,7 @@ const HistoryStockSchema = new Schema({
     min: 0,
     required: true,
     validate: {
-      validator: function(v) {
+      validator: function (v) {
         return v > 0;
       },
     },
@@ -34,17 +34,19 @@ const HistoryStockSchema = new Schema({
     min: 0,
     required: true,
     validate: {
-      validator: function(v) {
+      validator: function (v) {
         return v > 0;
       },
     },
   },
-  date: Date
+  date: Date,
 });
-HistoryStockSchema.path('seller').required(function() { return this.where === 'trans'; });
-HistoryStockSchema.pre('save', function(next, doc) {
-	doc.date = new Date();
-	next();
+HistoryStockSchema.path('seller').required(function () {
+  return this.where === 'trans';
+});
+HistoryStockSchema.pre('save', function (next, doc) {
+  doc.date = new Date();
+  next();
 });
 
-export default  mongoose.model('HistoryStock', HistoryStockSchema);
+export default mongoose.model('HistoryStock', HistoryStockSchema);

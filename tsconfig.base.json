@@ -19,9 +19,8 @@
     "strict": true,
     "target": "es2022",
     "paths": {
-      "@another/db/*" : ["packages/db/src/*"],
-      "@another/stock" : ["packages/stock/src"]
-
+      "@another/db/*": ["packages/db/src/*"],
+      "@another/stock": ["packages/stock/src"]
     }
   }
 }

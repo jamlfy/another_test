@@ -5,16 +5,16 @@ const StockSchema = new Schema({
   tick: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   description: {
     type: string,
   },
-  date: Date
+  date: Date,
 });
-StockSchema.pre('save', function(next, doc) {
-	doc.date = new Date();
-	next();
+StockSchema.pre('save', function (next, doc) {
+  doc.date = new Date();
+  next();
 });
 
-export default  mongoose.model('Stock', StockSchema);
+export default mongoose.model('Stock', StockSchema);
