@@ -18,6 +18,7 @@ const UserSchema = new Schema({
   	type: String,
     required: true,
     select: false,
+    transform: () => null,
   },
   date: Date
 });

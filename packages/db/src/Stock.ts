@@ -4,11 +4,12 @@ const { Schema } = mongoose;
 const StockSchema = new Schema({
   seller: {
     type: Schema.Types.ObjectId,
-    ref: 'users'
+    ref: 'users',
   },
-  bayer: { 
+  buyer: { 
     type: Schema.Types.ObjectId, 
-    ref: 'users' 
+    ref: 'users',
+    required: true,
   },
   where: {
     type: String,
@@ -37,8 +38,10 @@ const StockSchema = new Schema({
   },
   date: Date
 });
-
+StockSchema.path('seller').required(function() { return this.where === 'trans'; });
 StockSchema.pre('save', function(next) {
 	doc.date = new Date();
 	next();
 });
+
+export default  mongoose.model('stock', StockSchema);
