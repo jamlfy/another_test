@@ -1,5 +1,7 @@
 import { Route } from "express";
 import jwt from "jsonwebtoken";
+import User from '@another/db/User';
+
 import passport from "./jwt";
 
 const auth = Route();
@@ -32,8 +34,25 @@ auth.post('/logout', (req, res, next) => {
 });
 
 auth.post('/signup', (req, res, next) => {
-
-
+  const user = new User({ email: req.body.email });
+  user.hash(req.body.password)
+    .then((e) => e.save())
+    .then(e => {
+      res
+        .status(200)
+        .json({ 
+          message: "user logged in",
+          token: jwt.sing(e, "secret")
+        });
+    })
+    .catch((err) => {
+      res
+        .status(502)
+        .json({ 
+          message: "user logged out",
+          error
+        });
+    })
 });
 
 export default auth:

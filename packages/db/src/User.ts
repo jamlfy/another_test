@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import mongoose from './connection';
 const { Schema } = mongoose;
 
@@ -21,9 +22,6 @@ const UserSchema = new Schema({
 });
 
 class UserClass {
-	setPassword(pass){
-		this.password = password( passwordString, this._id );
-	}
 
 	async hash(password) {
 	    return new Promise((resolve, reject) => {
@@ -31,12 +29,13 @@ class UserClass {
 
 	        crypto.scrypt(password, salt, 64, (err, derivedKey) => {
 	            if (err) reject(err);
-	            resolve(salt + ":" + derivedKey.toString('hex'))
+	            this.hash = salt + ":" + derivedKey.toString('hex');
+	            resolve(this);
 	        });
 	    })
 	}
 
-	async verify(password) {
+	private async verify(password) {
 	    return new Promise((resolve, reject) => {
 	        const [salt, key] = this.hash.split(":")
 	        crypto.scrypt(password, salt, 64, (err, derivedKey) => {
@@ -48,9 +47,9 @@ class UserClass {
 
 
 	static async login(email, password) {
-		const user = await this.findOne({ email });
-  	 	
-  	 	const isPassword = await user.verify(password);
+		const isPassword = await this
+			.findOne({ email })
+			.then(user => user.verify(password);
 
   	 	if(!isPassword){
   	 		throw new Error('Is not the password') 

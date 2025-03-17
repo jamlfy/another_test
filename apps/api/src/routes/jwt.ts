@@ -17,7 +17,7 @@ passport.use(new Jwt.Strategy({
 }));
 
 passport.use(new LocalStrategy(function verify(username, password, cb) {
-  User.findLogin(username, password)
+  User.login(username, password)
     .then((user) => {
       cb(null, user);
     })
