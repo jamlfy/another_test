@@ -9,7 +9,6 @@ const HistoryStockSchema = new Schema({
   buyer: { 
     type: Schema.Types.ObjectId, 
     ref: 'users',
-    required: true,
   },
   where: {
     type: String,
@@ -17,8 +16,8 @@ const HistoryStockSchema = new Schema({
     required: true,
   },
   stock: {
-    type: String,
-    required: true,
+    type: Schema.Types.ObjectId,
+    ref: 'Stock',
   },
   price: {
     type: Number,
