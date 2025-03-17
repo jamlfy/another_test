@@ -8,7 +8,7 @@ passport.use(new Jwt.Strategy({
     jsonWebTokenOptions: {
       ignoreExpiration: false,
     },
-    secretOrKey: secret,
+    secretOrKey: "secret",
     algorithms: ['HS256'],
 }, function(jwt_payload, done) {
     User.findOne({id: jwt_payload.sub})

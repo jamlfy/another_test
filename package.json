@@ -71,6 +71,7 @@
   "workspaces": [
     "apps/*",
     "pacakges/*",
-    "packages/db"
+    "packages/db",
+    "packages/stock"
   ]
 }
