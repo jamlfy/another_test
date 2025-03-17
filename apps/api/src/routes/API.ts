@@ -1,5 +1,6 @@
 import { Route } from 'express';
 import passport from "./jwt";
+import stock from '@another/stock';
 
 const API = Route()
 
