@@ -1,22 +1,44 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-const UserSchema = new Schema({
-  id: ObjectId,
-  email: {
+const StockSchema = new Schema({
+  seller: {
+    type: Schema.Types.ObjectId,
+    ref: 'users'
+  },
+  bayer: { 
+    type: Schema.Types.ObjectId, 
+    ref: 'users' 
+  },
+  where: {
     type: String,
+    enum: ["trans", "init"],
+    required: true,
+  },
+  price: {
+    type: Number,
+    min: 0,
     required: true,
     validate: {
       validator: function(v) {
-        return /\d{3}-\d{3}-\d{4}/.test(v);
+        return v > 0;
       },
-      message: props => `${props.value} is not a valid phone number!`
+    },
+  },
+  amount: {
+    type: Number,
+    min: 0,
+    required: true,
+    validate: {
+      validator: function(v) {
+        return v > 0;
+      },
     },
   },
   date: Date
 });
 
-UserSchema.pre('save', function(next) {
+StockSchema.pre('save', function(next) {
 	doc.date = new Date();
 	next();
 });

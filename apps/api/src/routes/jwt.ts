@@ -11,7 +11,7 @@ passport.use(new Jwt.Strategy({
     secretOrKey: "secret",
     algorithms: ['HS256'],
 }, function(jwt_payload, done) {
-    User.findOne({ _id: jwt_payload.sub})
+    User.findById(jwt_payload.sub)
       .then((user) => done(null, user.toObject({ useProjection: true, getters: true })))
       .catch(err => done(err, false));
 }));
