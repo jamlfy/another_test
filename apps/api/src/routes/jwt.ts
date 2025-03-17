@@ -11,18 +11,16 @@ passport.use(new Jwt.Strategy({
     secretOrKey: "secret",
     algorithms: ['HS256'],
 }, function(jwt_payload, done) {
-    User.findOne({id: jwt_payload.sub})
-      .then((user) => done(null, user))
+    User.findOne({ _id: jwt_payload.sub})
+      .then((user) => done(null, user.toObject({ useProjection: true, getters: true })))
       .catch(err => done(err, false));
 }));
 
-passport.use(new LocalStrategy(function verify(username, password, cb) {
+passport.use(new LocalStrategy(function verify(username, password, done) {
   User.login(username, password)
-    .then((user) => {
-      cb(null, user);
-    })
+    .then((user) => done(null, user.toObject({ useProjection: true, getters: true })))
     .catch((e) => {
-      cb(null, false, { message: 'Incorrect username or password.' });
+      done(null, false, { message: 'Incorrect username or password.' });
     })
 });
 

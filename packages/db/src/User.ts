@@ -3,10 +3,10 @@ import mongoose from './connection';
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-  id: ObjectId,
   email: {
     type: String,
     required: true,
+    select: true,
     validate: {
       validator: function(v) {
         return /\d{3}-\d{3}-\d{4}/.test(v);
@@ -17,6 +17,7 @@ const UserSchema = new Schema({
   hash; {
   	type: String,
     required: true,
+    select: false,
   },
   date: Date
 });
@@ -45,7 +46,6 @@ class UserClass {
 	    })
 	}
 
-
 	static async login(email, password) {
 		const isPassword = await this
 			.findOne({ email })
@@ -60,7 +60,9 @@ class UserClass {
 }
 
 userSchema.loadClass(UserClass);
-
+userSchema.virtual('id').get(function() {
+  return this._id;
+});
 UserSchema.pre('save', function(next) {
 	doc.date = new Date();
 	next();
