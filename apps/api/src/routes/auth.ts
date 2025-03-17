@@ -1,50 +1,51 @@
 import { Route } from "express";
-import passport from 'passport';
-import LocalStrategy from 'passport-local';
-import Jwt from "passport-jwt";
-import User from '@another/db/User';
-
-var opts = {}
-opts.jwtFromRequest = Jwt.ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = 'secret';
-opts.issuer = 'accounts.examplesoft.com';
-opts.audience = 'yoursite.net';
-
-passport.use(new Jwt.Strategy(opts, function(jwt_payload, done) {
-    User.findOne({id: jwt_payload.sub}, function(err, user) {
-        if (err) {
-            return done(err, false);
-        }
-        if (user) {
-            return done(null, user);
-        } else {
-            return done(null, false);
-            // or you could create a new account
-        }
-    });
-}));
-
-passport.use(new LocalStrategy(function verify(username, password, cb) {
-  User.findLogin(username, password)
-    .then((user) => {
-      cb(null, user);
-    })
-    .catch((e) => {
-      cb(null, false, { message: 'Incorrect username or password.' });
-    })
-});
-
-passport.serializeUser(function(user, cb) {
-  process.nextTick(function() {
-    cb(null, { id: user.id, username: user.username });
-  });
-});
-
-passport.deserializeUser(function(user, cb) {
-  process.nextTick(function() {
-    return cb(null, user);
-  });
-});
-
+import passport from "./jwt";
 
 const auth = Route();
+
+
+auth.get('/profile', passport.authenticate('jwt', {
+  successReturnToOrRedirect: '/',
+  failureMessage: true
+}), function(req, res, next) {
+
+});
+
+auth.post('/login/password', passport.authenticate('local', {
+  failureRedirect: '/profile',
+  failureMessage: true
+}));
+
+
+router.post('/logout', function(req, res, next) {
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.redirect('/');
+  });
+});
+
+
+auth.post('/signup', function(req, res, next) {
+
+  var salt = crypto.randomBytes(16);
+  crypto.pbkdf2(req.body.password, salt, 310000, 32, 'sha256', function(err, hashedPassword) {
+    if (err) { return next(err); }
+    db.run('INSERT INTO users (username, hashed_password, salt) VALUES (?, ?, ?)', [
+      req.body.username,
+      hashedPassword,
+      salt
+    ], function(err) {
+      if (err) { return next(err); }
+      var user = {
+        id: this.lastID,
+        username: req.body.username
+      };
+      req.login(user, function(err) {
+        if (err) { return next(err); }
+        res.redirect('/');
+      });
+    });
+  });
+});
+
+export default auth:
