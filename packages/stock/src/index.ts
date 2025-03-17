@@ -3,7 +3,7 @@ import History from '@another/db/History';
 
 
 export const history = (req, res ) => {
-	Stock.findOne()
+	History.findOne()
 };
 
 export const info = = (req, res ) => {
@@ -17,7 +17,7 @@ export const info = = (req, res ) => {
 
 			return res.json(e);
 		})
-		.catch(e => res.status(404).json({
+		.catch(error => res.status(404).json({
 			error,
 			message: "Dont found"
 		}))
