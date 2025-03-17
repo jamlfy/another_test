@@ -3,7 +3,31 @@ import History from '@another/db/History';
 
 
 export const history = (req, res ) => {
-	History.findOne()
+	const time  = parseInt(req.query.time) ?? 15;
+
+	History.aggregate([
+	  { 
+	  	"$group": {
+		    "_id": {
+		      "year": { "$year": "$date" },
+		      "dayOfYear": { "$dayOfYear": "$date" },
+		      "hour": { "$hour": "$date" },
+		      "interval": {
+		        "$subtract": [ 
+		          { "$minute": "$date" },
+		          { "$mod": [{ "$minute": "$date"}, time] }
+		        ]
+		      }
+		    },
+		    minPrice: { $min: { $divide: [ "$price", "$amount" ] } },
+     		maxPrice: { $max: { $divide: [ "$price", "$amount" ] } },
+     		averagePrice: { $avg: { $divide: [ "$price", "$amount" ] } },
+
+		},
+	    "count": { "$sum": 1 }
+	  },
+
+	])
 };
 
 export const info = = (req, res ) => {
